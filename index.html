@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dice Roll</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #results {
+            margin-bottom: 20px;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+        }
+        #result {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        td,
+        th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4caf50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<h1>Dice Roll</h1>
+<table id="results"></table>
+<button onclick="roll()">ROLL</button>
+<p>Result: <span id="result"></span></p>
+<h2>Last Results</h2>
+<table id="lastResults"></table>
+
+<script>
+    let diceResults = JSON.parse(localStorage.getItem("diceResults")) || [];
+    if (diceResults.length === 0) {
+        for (let i = 1; i <= 6; i++) {
+            for (let j = 1; j <= 6; j++) {
+                diceResults.push(i + j);
+            }
+        }
+    }
+
+    let lastResults = [];
+
+    function pickAndRemove(arr) {
+        let randomIndex = Math.floor(Math.random() * arr.length);
+        let randomItem = arr[randomIndex];
+        arr.splice(randomIndex, 1);
+        return randomItem;
+    }
+
+    function roll() {
+        let result = pickAndRemove(diceResults);
+        document.getElementById("result").textContent = result;
+        updateResults();
+        updateLastResults(result);
+        localStorage.setItem("diceResults", JSON.stringify(diceResults));
+    }
+
+    function updateResults() {
+        let sortedResults = [...diceResults].sort((a, b) => a - b);
+        let table = document.getElementById("results");
+        table.innerHTML = "";
+
+        let tr = document.createElement("tr");
+        for (let result of sortedResults) {
+            let td = document.createElement("td");
+            td.textContent = result;
+            tr.appendChild(td);
+            table.appendChild(tr);
+        }
+
+    }
+
+    function updateLastResults(result) {
+        lastResults.push(result);
+        let table = document.getElementById("lastResults");
+        table.innerHTML = "";
+
+        let tr = document.createElement("tr");
+        for (let result of lastResults) {
+            let td = document.createElement("td");
+            td.textContent = result;
+            tr.appendChild(td);
+            table.appendChild(tr);
+        }
+
+    }
+
+    updateResults();
+</script>
+</body>
+</html>
