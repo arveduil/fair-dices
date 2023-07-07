@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dice Roll</title>
+    <title>Fair Dices</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,7 +15,7 @@
             padding: 10px 20px;
         }
         #result {
-            font-size: 36px;
+            font-size: 72px;
             font-weight: bold;
         }
         table {
@@ -40,10 +40,10 @@
     </style>
 </head>
 <body>
-<h1>Dice Roll</h1>
+<h1>Fair Dices</h1>
 <table id="results"></table>
 <button onclick="roll()">ROLL</button>
-<p>Result: <span id="result"></span></p>
+<p id="result"></p>
 <h2>Last Results</h2>
 <table id="lastResults"></table>
 
@@ -68,10 +68,16 @@
 
     function roll() {
         let result = pickAndRemove(diceResults);
-        document.getElementById("result").textContent = result;
+
+        updateResult(result);
+
         updateResults();
         updateLastResults(result);
         localStorage.setItem("diceResults", JSON.stringify(diceResults));
+    }
+
+    function updateResult(result) {
+        document.getElementById("result").textContent = result;
     }
 
     function updateResults() {
